@@ -51,8 +51,10 @@ cp .env.example .env
 ## Run the API
 
 ```bash
-uvicorn api:app --reload
+python main.py
 ```
+
+> `main.py` calls uvicorn under the hood — no CLI flags needed.
 
 ---
 
@@ -142,7 +144,8 @@ Results are saved to `training_results.png`.
 
 ```
 rx-goblin/
-├── api.py              # FastAPI app
+├── main.py             # Entry point — runs the server
+├── api.py              # FastAPI app — routes and lifespan
 ├── preprocessing.py    # Image pipeline
 ├── model.py            # TrOCR load + predict
 ├── correction.py       # FDA drug name correction
