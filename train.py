@@ -65,6 +65,10 @@ def compute_metrics(pred, processor):
     pred_ids = pred.predictions
     label_ids = pred.label_ids
 
+    # predictions can come as a tuple (ids, past_key_values, ...) — take only the ids
+    if isinstance(pred_ids, tuple):
+        pred_ids = pred_ids[0]
+
     # replace -100 back to pad token for decoding
     label_ids[label_ids == -100] = processor.tokenizer.pad_token_id
 
@@ -120,6 +124,7 @@ def train():
         predict_with_generate=True,     # use generate() during evaluation
         logging_steps=50,
         report_to="none",
+        max_grad_norm=1.0,              # clip gradients to prevent explosion
     )
 
     # trainer
