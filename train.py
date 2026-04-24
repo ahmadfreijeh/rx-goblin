@@ -28,7 +28,7 @@ class PrescriptionDataset(Dataset):
     def __init__(self, split, processor):
         # load labels.csv — columns: image_path, text
         csv_path = os.path.join(DATA_DIR, split, "labels.csv")
-        self.df = pd.read_csv(csv_path).head(TRAIN_SAMPLES)
+        self.df = pd.read_csv(csv_path).dropna(subset=["IDENTITY"]).head(TRAIN_SAMPLES)
         self.processor = processor
         self.split_dir = os.path.join(DATA_DIR, split, "images")
 
@@ -46,7 +46,7 @@ class PrescriptionDataset(Dataset):
 
         # tokenize the ground truth text
         labels = self.processor.tokenizer(
-            row["IDENTITY"],
+            str(row["IDENTITY"]),
             padding="max_length",
             max_length=128,
             truncation=True,

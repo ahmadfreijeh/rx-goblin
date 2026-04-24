@@ -100,7 +100,18 @@ curl -X POST http://localhost:8000/extract -F "file=@prescription.jpg"
 
 ## Fine-tuning (optional)
 
-To fine-tune TrOCR on your own dataset:
+The fine-tuning pipeline is fully built using **LoRA (Low-Rank Adaptation)** via the PEFT library. The goal was to prove the concept of adapting a pretrained model to a new domain without retraining from scratch — training only ~0.47% of the model's parameters instead of all 62M.
+
+The training script supports:
+- LoRA adapters on the attention layers (`query`, `value`)
+- CER and WER metrics evaluated after every epoch
+- Gradient clipping to prevent exploding gradients
+- Full config via `.env` (epochs, batch size, learning rate, sample count)
+- Training loss/CER/WER graphs saved to `training_results.png`
+
+**Note on dataset quality:** The Kaggle handwriting dataset used here contains single handwritten words (names). This caused the training loss to not decrease — the model had no meaningful signal to learn from. For fine-tuning to work properly, the dataset needs full handwritten text lines (e.g. the [IAM Handwriting Database](https://fki.tic.heia-fr.ch/databases/iam-handwriting-database)). This is a classic **garbage in, garbage out** problem — the pipeline is correct, the data wasn't right for the task.
+
+To run fine-tuning with a proper dataset:
 
 1. Put your data in `data/processed/train/` and `data/processed/val/`  
    Each folder needs an `images/` directory and a `labels.csv` with `FILENAME` and `IDENTITY` columns.
@@ -124,7 +135,7 @@ Training config is controlled via `.env`:
 TRAIN_EPOCHS=2
 TRAIN_BATCH_SIZE=4
 TRAIN_SAMPLES=5000
-TRAIN_LR=5e-5
+TRAIN_LR=1e-5
 ```
 
 Results are saved to `training_results.png`.
