@@ -129,6 +129,15 @@ Results are saved to `training_results.png`.
 
 ---
 
+## Datasets
+
+| Dataset | Used for | Link |
+|---|---|---|
+| Handwriting Recognition (Kaggle) | Fine-tuning TrOCR on handwritten text | [kaggle.com](https://www.kaggle.com/datasets/landlord/handwriting-recognition?resource=download&select=validation_v2) |
+| FDA National Drug Code Directory | Drug name fuzzy correction | [fda.gov](https://www.fda.gov/drugs/drug-approvals-and-databases/national-drug-code-directory) |
+
+---
+
 ## Project structure
 
 ```
